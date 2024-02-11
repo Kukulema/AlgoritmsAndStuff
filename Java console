@@ -1,0 +1,42 @@
+package com.example;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class Main {
+    public static void main(String[] args) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+        try {
+            System.out.println("Введите 6 цифр:");
+            String userInput = reader.readLine();
+
+            // Формируем URL с учетом введенного пользователем числа
+            String apiUrl = "https://api.bincodes.com/bin/?format=json&api_key=735b043a45a036cd3ebee8b663120caa&bin=" + userInput;
+
+            // Создаем объект URL и устанавливаем соединение
+            URL url = new URL(apiUrl);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+
+            // Чтение ответа от сервера
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            String inputLine;
+            StringBuilder response = new StringBuilder();
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+            // Вывод ответа на экран
+            System.out.println("Ответ от сервера:");
+            System.out.println(response.toString());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -1,0 +1,19 @@
+const data = JSON.stringify({
+	bin: '448590'
+});
+
+const xhr = new XMLHttpRequest();
+xhr.withCredentials = true;
+
+xhr.addEventListener('readystatechange', function () {
+	if (this.readyState === this.DONE) {
+		console.log(this.responseText);
+	}
+});
+
+xhr.open('POST', 'https://bin-ip-checker.p.rapidapi.com/?bin=54694200');
+xhr.setRequestHeader('content-type', 'application/json');
+xhr.setRequestHeader('X-RapidAPI-Key', 'f3606030abmshf51a8e351db646fp10f183jsn5a282c0ea5f1');
+xhr.setRequestHeader('X-RapidAPI-Host', 'bin-ip-checker.p.rapidapi.com');
+
+xhr.send(data);
