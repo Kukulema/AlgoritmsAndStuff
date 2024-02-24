@@ -6,34 +6,38 @@ import java.util.Base64;
 public class DiffiHelman {
     public static void main(String[] args) throws Exception {
         int p = 13;
-        int q = 83;
+        int g = 83;
+        int a = 7; // Закрытый ключ Алисы
+        int b = 5; // Закрытый ключ Боба
 
-        // Вычисление закрытого сессионного ключа
-        int sessionKey = p * q;
+        // Вычисление секретного ключа 
+        int sessionKeyAlice = (int) Math.pow(g, a) % p;
+        int sessionKeyBob = (int) Math.pow(g, b) % p;
+
+        // Преобразование секретного ключа в ключ для AES
+        String aesKeyAlice = generateAESKey(String.valueOf(sessionKeyAlice));
+        String aesKeyBob = generateAESKey(String.valueOf(sessionKeyBob));
 
         // Сообщение для шифрования
-        String message = "lalalalalalalaal";
+        String message = "llalalalalaaaaaa";
 
-        // Преобразование ключа в ключ для AES
-        String aesKey = generateAESKey(String.valueOf(sessionKey));
+        // Шифрование сообщения на стороне Алисы
+        String encryptedMessage = encryptMessage(message, aesKeyAlice);
+        System.out.println("Зашифрованное сообщение Алисы: " + encryptedMessage);
 
-        // Шифрование сообщения на стороне Отправителя
-        String encryptedMessage = encryptMessage(message, aesKey);
-
-        System.out.println("Зашифрованное сообщение: " + encryptedMessage);
-
-        // Расшифрование сообщения на стороне Получателя
-        String decryptedMessage = decryptMessage(encryptedMessage, aesKey);
-
-        System.out.println("Расшифрованное сообщение: " + decryptedMessage);
+        // Расшифрование сообщения на стороне Боба
+        String decryptedMessage = decryptMessage(encryptedMessage, aesKeyBob);
+        System.out.println("Расшифрованное сообщение Боба: " + decryptedMessage);
     }
-   // Генерация ключа AES на основе заданного ключа.
+
+    // Метод для генерации ключа AES на основе заданного ключа
     public static String generateAESKey(String key) throws Exception {
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
         byte[] hashedBytes = digest.digest(key.getBytes("UTF-8"));
         return Base64.getEncoder().encodeToString(hashedBytes);
     }
 
+    // Метод для шифрования сообщения
     public static String encryptMessage(String message, String key) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         SecretKeySpec secretKey = new SecretKeySpec(Base64.getDecoder().decode(key), "AES");
@@ -42,6 +46,7 @@ public class DiffiHelman {
         return Base64.getEncoder().encodeToString(encryptedBytes);
     }
 
+    // Метод для расшифрования сообщения
     public static String decryptMessage(String encryptedMessage, String key) throws Exception {
         Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
         SecretKeySpec secretKey = new SecretKeySpec(Base64.getDecoder().decode(key), "AES");
