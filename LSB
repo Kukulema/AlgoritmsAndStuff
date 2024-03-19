@@ -1,0 +1,8 @@
+
+from stegano import lsb
+
+secret =lsb.hide("1019.png", "password rofls")
+secret.save("topsecret1.png")
+
+text=lsb.reveal("topsecret1.png")
+print(text)
