@@ -15,5 +15,5 @@ xhr.open('POST', 'https://bin-ip-checker.p.rapidapi.com/?bin=54694200');
 xhr.setRequestHeader('content-type', 'application/json');
 xhr.setRequestHeader('X-RapidAPI-Key', 'f3606030abmshf51a8e351db646fp10f183jsn5a282c0ea5f1');
 xhr.setRequestHeader('X-RapidAPI-Host', 'bin-ip-checker.p.rapidapi.com');
-
+1
 xhr.send(data);
